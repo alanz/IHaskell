@@ -2,6 +2,8 @@
 # 
 # build with 
 #  docker build -t 'alanz/IHaskell' .
+# run with
+# docker run -P -d 'alanz/IHaskell'
 
 FROM alanz/haskell-platform-2013.2-deb64
 
@@ -40,8 +42,9 @@ RUN cd zeromq4-x-4.0.3 && make install
 #DOCKER_PASSWORD=password
 #echo User: docker Password: $DOCKER_PASSWORD
 #DOCKER_ENCRYPYTED_PASSWORD=`perl -e 'print crypt('"$DOCKER_PASSWORD"', "aa"),"\n"'`
+# result of above is aajfMKNH1hTm2
 #useradd -m -d /home/docker -p $DOCKER_ENCRYPYTED_PASSWORD docker
-RUN useradd -m -d /home/docker  docker
+RUN useradd -m -d /home/docker -p 'aajfMKNH1hTm2' docker
 RUN sed -Ei 's/adm:x:4:/docker:x:4:docker/' /etc/group
 RUN adduser docker sudo
 
@@ -85,4 +88,16 @@ RUN sudo -u docker cabal install ihaskell-diagrams
 RUN sudo -u docker cabal install ihaskell-display
 RUN apt-get -y install libmagic-dev
 RUN sudo -u docker cabal install ihaskell-magic
+
+#-----------------------------------------------------------------------
+RUN apt-get -y install ssh openssh-server
+
+# Set up sshd directory
+RUN mkdir /var/run/sshd
+
+# Expose the ssh port
+EXPOSE 22
+# Start shell and ssh services.
+#CMD ["/bin/bash","/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D"]
 
