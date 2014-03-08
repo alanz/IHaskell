@@ -139,7 +139,7 @@ EXPOSE 22
 # Start shell and ssh services.
 #CMD ["/usr/sbin/sshd", "-D"]
 
-ADD run.sh /home/docker/run.sh
+ADD ./docker/run.sh /home/docker/run.sh
 
 ENV PATH /home/docker/.cabal/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
 USER docker
